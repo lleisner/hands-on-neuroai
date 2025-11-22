@@ -1,8 +1,13 @@
 name: hands-on-neuroai
+
 channels:
+  - pytorch
   - conda-forge
+  - defaults
+
 dependencies:
   - python=3.11
+  # core scientific stack
   - numpy
   - pandas
   - scipy
@@ -10,8 +15,12 @@ dependencies:
   - matplotlib
   - jupyterlab
   - pytest
-  - ruff
   - pip
-  - pip:
-    - pytorch
-    - torchvision
+
+  # pytorch (CPU-only)
+  - pytorch
+  - torchvision
+  - cpuonly  # ensures no CUDA deps; remove if you want GPU
+
+  # optional: ruff via conda-forge (or you can keep this under pip)
+  - ruff
