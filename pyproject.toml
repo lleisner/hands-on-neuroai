@@ -1,7 +1,7 @@
 [project]
-name = "project_name"
+name = "hands_on_neuroai"
 version = "0.1.0"
-description = "Generic ML project"
+description = "Hands on NeuroAI"
 requires-python = ">=3.11"
 
 [tool.ruff]

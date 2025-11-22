@@ -1,4 +1,4 @@
-name: ml-project
+name: hands-on-neuroai
 channels:
   - conda-forge
 dependencies:
@@ -12,3 +12,6 @@ dependencies:
   - pytest
   - ruff
   - pip
+  - pip:
+    - pytorch
+    - torchvision
