@@ -23,14 +23,14 @@ def get_mnist_datasets(config: MNISTConfig) -> Tuple[Dataset, Dataset]:
     train_dataset = datasets.MNIST(
         root=config.root,
         train=True,
-        download=True,
+        download=False,
         transform=transform,
     )
 
     test_dataset = datasets.MNIST(
         root=config.root,
         train=False,
-        download=True,
+        download=False,
         transform=transform,
     )
 
@@ -109,7 +109,7 @@ def make_dataloader(
 def build_permuted_mnist_loaders(
     config: MNISTConfig,
     num_tasks: int,
-    batch_size: int,
+    batch_size: int = 128,
     base_seed: int = 1000,
 ) -> Tuple[List[DataLoader], List[DataLoader]]:
     """Return lists of train/test loaders for num_tasks permuted-MNIST tasks."""

@@ -28,6 +28,20 @@ def parse_perm_mnist_args() -> argparse.Namespace:
     parser.add_argument("--data-root", type=str, default="data")
     parser.add_argument("--output-dir", type=str, default="results/perm_mnist")
 
+    parser.add_argument(
+        "--verbose", "-v",
+        type=int,
+        default=0,
+        choices=[0, 1, 2, 3],
+        help=(
+            "Verbosity level:\n"
+            " 0 = silent\n"
+            " 1 = task-level progress bar (default)\n"
+            " 2 = task + step bars\n"
+            " 3 = bars + periodic loss prints"
+        ),
+    )
+
     return parser.parse_args()
 
 

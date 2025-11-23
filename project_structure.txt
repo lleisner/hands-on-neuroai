@@ -1,0 +1,44 @@
+.
+├── README.md
+├── configs
+│   └── example_config.yaml
+├── data
+├── docs
+│   ├── contributing.md
+│   ├── project_setup.md
+│   └── structure.md
+├── environment.yml
+├── notebooks
+│   ├── 00_exploration.ipynb
+│   ├── 01_playground.ipynb
+│   ├── 02_analysis.ipynb
+│   └── data
+│       └── MNIST
+│           └── raw
+├── project_structure.txt
+├── pyproject.toml
+├── scripts
+│   ├── download_data.py
+│   └── run_perm_mnist.py
+├── src
+│   └── hands_on_neuroai
+│       ├── __init__.py
+│       ├── data
+│       │   ├── download.py
+│       │   └── mnist.py
+│       ├── models
+│       │   ├── context.py
+│       │   ├── factory.py
+│       │   ├── mlp.py
+│       │   └── psp.py
+│       ├── training
+│       │   ├── metrics.py
+│       │   └── perm_mnist.py
+│       ├── utils
+│       │   ├── cli.py
+│       │   └── io.py
+│       └── utils.py
+└── tests
+    └── test_psp.py
+
+16 directories, 26 files
