@@ -2,11 +2,13 @@ name: hands-on-neuroai
 
 channels:
   - pytorch
+  - nvidia          # <-- add this for pytorch-cuda
   - conda-forge
   - defaults
 
 dependencies:
   - python=3.11
+
   # core scientific stack
   - numpy
   - pandas
@@ -17,10 +19,11 @@ dependencies:
   - pytest
   - pip
 
-  # pytorch (CPU-only)
+  # pytorch with GPU support (CUDA 12.x compatible)
   - pytorch
   - torchvision
-  - cpuonly  # ensures no CUDA deps; remove if you want GPU
+  - pytorch-cuda=12.4   # <-- important: match a supported runtime, works with driver CUDA 12.7
 
-  # optional: ruff via conda-forge (or you can keep this under pip)
+  # optional tools
   - ruff
+  - tqdm
