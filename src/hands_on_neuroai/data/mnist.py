@@ -90,22 +90,6 @@ def build_permuted_mnist_tasks(
     return train_datasets, test_datasets
 
 
-def make_dataloader(
-    dataset: Dataset,
-    batch_size: int,
-    shuffle: bool,
-    num_workers: int,
-    pin_memory: bool,
-) -> DataLoader:
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        shuffle=shuffle,
-        num_workers=num_workers,
-        pin_memory=pin_memory,
-    )
-
-
 def build_permuted_mnist_loaders(
     config: MNISTConfig,
     num_tasks: int,
@@ -120,7 +104,7 @@ def build_permuted_mnist_loaders(
     )
 
     train_loaders = [
-        make_dataloader(
+        DataLoader(
             ds,
             batch_size=batch_size,
             shuffle=True,
@@ -131,7 +115,7 @@ def build_permuted_mnist_loaders(
     ]
 
     test_loaders = [
-        make_dataloader(
+        DataLoader(
             ds,
             batch_size=batch_size,
             shuffle=False,
