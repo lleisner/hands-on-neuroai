@@ -7,14 +7,17 @@ from torch import Tensor
 
 
 class MLP2Layer(nn.Module):
-    """Baseline 2-layer MLP for MNIST: 784 -> H -> H -> 10."""
+    """Baseline 2-layer MLP: input_dim -> hidden_dim -> hidden_dim -> output_dim.
+    
+    Works with any dataset by specifying input and output dimensions.
+    """
 
-    def __init__(self, hidden_dim: int) -> None:
+    def __init__(self, input_dim: int, hidden_dim: int, output_dim: int) -> None:
         super().__init__()
         self.flatten = nn.Flatten()
-        self.fc1 = nn.Linear(28 * 28, hidden_dim)
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, hidden_dim)
-        self.fc3 = nn.Linear(hidden_dim, 10)
+        self.fc3 = nn.Linear(hidden_dim, output_dim)
 
     def forward(self, x: Tensor) -> Tensor:  # type: ignore[override]
         x = self.flatten(x)

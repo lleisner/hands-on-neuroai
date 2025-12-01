@@ -3,7 +3,8 @@ from __future__ import annotations
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
-
+from typing import List, Tuple
+import numpy as np
 
 @torch.no_grad()
 def evaluate_accuracy(
@@ -24,13 +25,6 @@ def evaluate_accuracy(
         total += labels.size(0)
 
     return correct / max(1, total)
-
-
-
-import torch
-import numpy as np
-from torch.utils.data import DataLoader
-from typing import List, Tuple
 
 
 def collect_hidden_activations(

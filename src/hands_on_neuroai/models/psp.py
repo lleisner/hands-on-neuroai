@@ -41,9 +41,15 @@ class PSPLinear(nn.Module):
 
 
 class PSPMLP2Layer(nn.Module):
+    """Task-aware 2-layer MLP with Probabilistic Synaptic Plasticity (PSP).
+    
+    Works with any dataset by specifying input and output dimensions.
+    """
     def __init__(
         self,
+        input_dim: int,
         hidden_dim: int,
+        output_dim: int,
         num_tasks: int,
         context_fn: Callable[[int, int | None], Tensor],
         seed: int = 0,
@@ -52,9 +58,9 @@ class PSPMLP2Layer(nn.Module):
 
         self.flatten = nn.Flatten()
 
-        self.fc1 = PSPLinear(784, hidden_dim, num_tasks, context_fn, seed)
+        self.fc1 = PSPLinear(input_dim, hidden_dim, num_tasks, context_fn, seed)
         self.fc2 = PSPLinear(hidden_dim, hidden_dim, num_tasks, context_fn, seed + 1)
-        self.fc3 = PSPLinear(hidden_dim, 10, num_tasks, context_fn, seed + 2)
+        self.fc3 = PSPLinear(hidden_dim, output_dim, num_tasks, context_fn, seed + 2)
 
         self.num_tasks = num_tasks
         self.set_task(0)
