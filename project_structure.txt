@@ -12,9 +12,8 @@
 │   ├── 00_exploration.ipynb
 │   ├── 01_playground.ipynb
 │   ├── 02_analysis.ipynb
-│   └── data
-│       └── MNIST
-│           └── raw
+│   ├── 03_task_transforms_demo.ipynb
+│   └── 04_analysis_continual_learning.ipynb
 ├── project_structure.txt
 ├── pyproject.toml
 ├── scripts
@@ -24,7 +23,8 @@
 │   └── hands_on_neuroai
 │       ├── __init__.py
 │       ├── data
-│       │   ├── download.py
+│       ├── dataset_creation
+│       │   ├── datasets.py
 │       │   └── mnist.py
 │       ├── models
 │       │   ├── context.py
@@ -32,6 +32,7 @@
 │       │   ├── mlp.py
 │       │   └── psp.py
 │       ├── training
+│       │   ├── continual_learning.py
 │       │   ├── metrics.py
 │       │   └── perm_mnist.py
 │       ├── utils
@@ -39,6 +40,9 @@
 │       │   └── io.py
 │       └── utils.py
 └── tests
-    └── test_psp.py
+    ├── test_datasets.py
+    ├── test_psp.py
+    ├── test_task_splits.py
+    └── test_task_transforms.py
 
-16 directories, 26 files
+14 directories, 32 files

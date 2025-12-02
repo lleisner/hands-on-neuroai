@@ -18,7 +18,7 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from hands_on_neuroai.data.datasets import DatasetConfig
+from hands_on_neuroai.dataset_creation.datasets import DatasetConfig
 from hands_on_neuroai.models.factory import build_model_for_continual_learning
 from hands_on_neuroai.training.metrics import evaluate_accuracy
 
