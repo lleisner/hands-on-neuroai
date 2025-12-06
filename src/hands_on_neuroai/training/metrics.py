@@ -18,7 +18,8 @@ def evaluate_accuracy(
     total = 0
 
     for imgs, labels in loader:
-        imgs, labels = imgs.to(device), labels.to(device)
+        imgs = imgs.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
         logits: Tensor = model(imgs)
         preds = logits.argmax(dim=1)
         correct += (preds == labels).sum().item()
@@ -74,7 +75,7 @@ def collect_hidden_activations(
 
             collected = 0
             for imgs, labels in loaders[task_id]:
-                imgs = imgs.to(device)
+                imgs = imgs.to(device, non_blocking=True)
 
                 # clear any stale activations from previous batch
                 hidden_collector.clear()

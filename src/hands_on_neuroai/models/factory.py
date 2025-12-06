@@ -1,11 +1,20 @@
 from __future__ import annotations
 
+from dataclasses import replace
+from typing import Any, Sequence
+
 import torch
 from torch import device as torch_device
 
+from hands_on_neuroai.dataset_creation.base import DATASET_METADATA
+from hands_on_neuroai.dataset_creation.clutter import (
+    ClutteredCompositeDataset,
+    ClutteredDatasetConfig,
+)
 from hands_on_neuroai.models.mlp import MLP2Layer
 from hands_on_neuroai.models.context import get_context_generator
 from hands_on_neuroai.models.psp import PSPMLP2Layer
+from hands_on_neuroai.models.rcnn import RCNN, RCNNConfig
 
 
 def build_model_for_continual_learning(
@@ -56,35 +65,55 @@ def build_model_for_continual_learning(
     return model.to(device)
 
 
-# Backwards compatibility alias
-def build_model_for_perm_mnist(
-    context_type: str = "binary",
-    hidden_dim: int = 256,
-    num_tasks: int = 10,
-    base_seed: int = 42,
-    device: torch_device = "cpu",
-) -> torch.nn.Module:
-    """Backwards compatibility alias for MNIST permuted task experiments.
+# --- RCNN for cluttered dataset experiments ---
 
-    Convenience wrapper that calls build_model_for_continual_learning() with
-    MNIST-specific input_dim=784 and output_dim=10.
+
+def _infer_num_classes_from_bases(base_names: Sequence[str]) -> int:
+    """Infer total classes by summing metadata of base datasets (no domain tags)."""
+    total = 0
+    for name in base_names:
+        name = name.lower()
+        if name not in DATASET_METADATA:
+            raise ValueError(f"Unknown dataset: {name}. Available: {list(DATASET_METADATA.keys())}")
+        total += DATASET_METADATA[name][3]
+    return total
+
+
+def build_rcnn_for_clutter(
+    clutter_cfg: ClutteredDatasetConfig,
+    device: torch_device,
+    **rcnn_overrides: Any,
+) -> RCNN:
+    """
+    Build an RCNN with config inferred from a ClutteredDatasetConfig.
 
     Args:
-        context_type: Type of context mechanism (see build_model_for_continual_learning)
-        hidden_dim: Hidden layer dimension
-        num_tasks: Number of tasks
-        base_seed: Random seed for context generation
-        device: Device to place model on (cpu or cuda)
+        clutter_cfg: Dataset config (provides image_size, base datasets, etc.).
+        device: torch device.
+        rcnn_overrides: Optional overrides for RCNNConfig fields (e.g., timesteps, interaction).
 
     Returns:
-        A torch.nn.Module configured for permuted MNIST tasks.
+        RCNN on the requested device.
     """
-    return build_model_for_continual_learning(
-        context_type=context_type,
-        input_dim=784,  # MNIST: 28x28 = 784
-        hidden_dim=hidden_dim,
-        output_dim=10,  # 10 digits
-        num_tasks=num_tasks,
-        base_seed=base_seed,
-        device=device,
+    # Normalize base names
+    base_names = (
+        (clutter_cfg.base_datasets,) if isinstance(clutter_cfg.base_datasets, str) else clutter_cfg.base_datasets
     )
+
+    # Infer in_channels by peeking at a tiny dataset instance
+    probe_cfg = replace(clutter_cfg, num_samples=1, return_aux_labels=False)
+    probe_ds = ClutteredCompositeDataset(probe_cfg)
+    in_channels = rcnn_overrides.pop("in_channels", probe_ds.out_channels)
+
+    # Infer num_classes by summing base dataset class counts (assumes disjoint labels)
+    num_classes = rcnn_overrides.pop("num_classes", _infer_num_classes_from_bases(base_names))
+
+    image_size = rcnn_overrides.pop("image_size", clutter_cfg.image_size)
+
+    rcnn_cfg = RCNNConfig(
+        in_channels=in_channels,
+        num_classes=num_classes,
+        image_size=image_size,
+        **rcnn_overrides,
+    )
+    return RCNN(rcnn_cfg).to(device)

@@ -120,7 +120,8 @@ def train_model_on_continual_learning_tasks(
                 data_iter = iter(train_loader)
                 imgs, labels = next(data_iter)
 
-            imgs, labels = imgs.to(device), labels.to(device)
+            imgs = imgs.to(device, non_blocking=True)
+            labels = labels.to(device, non_blocking=True)
 
             model.train()
             optimizer.zero_grad()
